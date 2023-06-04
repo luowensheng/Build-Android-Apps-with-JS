@@ -25,7 +25,7 @@ def get_android_sdk_path():
 
 SDK_PATH = get_android_sdk_path()
 BUILD_GRADLE = "build.gradle"
-OUTPUT_HTML_PATH = "app/src/main/java/com/example/{app_name_lower}/html.kt" # "app/src/main/assets/index.html"
+OUTPUT_HTML_PATH = "app/src/main/java/com/example/{app_name_lower}/html.kt" 
 
 def read_dir(full_path: str, create_dir_if_missing:bool=True):
         
@@ -47,7 +47,6 @@ def copy_file_content(new_file_path: str, old_file_path: str, params:Optional[di
     if params:
         with open(new_file_path, 'w') as f:
             old_file_path = pathlib.Path(old_file_path).as_posix()
-            # print(old_file_path)
             content = open(old_file_path).read()
             for k, v in params.items():
                 content = content.replace("{"+k+"}", v)
@@ -89,7 +88,7 @@ def create_project(app_name: str, entry_path: str, directory_path: str, sdk_path
         ContentPath(path="app/src/main/res/values/strings.xml", params={"app_name": app_name}),
         ContentPath(path="app/src/main/res/values/themes.xml", params={"app_name": app_name}),
         ContentPath(path="app/src/main/res/values-night/themes.xml", params={"app_name": app_name}),
-        # ContentPath(path=OUTPUT_HTML_PATH, params={"app_name": app_name}),
+
         ContentPath(path="app/src/main/java/com/example/{app_name_lower}/MainActivity.kt", params={"app_name_lower":app_name.lower()}),
         ContentPath(path=OUTPUT_HTML_PATH, params={"app_name_lower":app_name.lower()}),
 
@@ -132,8 +131,7 @@ def main():
                         )
 
     parser.add_argument('-n', '--project', help='project name', required=True)
-    # print(SDK_PATH, os.path.exists(SDK_PATH))
-    # if SDK_PATH and os.path.exists(SDK_PATH):
+
     if SDK_PATH:
         parser.add_argument('-s', '--sdk', default=SDK_PATH, type=str, required=False)
     else:
@@ -156,18 +154,6 @@ def main():
         gradlew_path = gradlew_path.replace("./", "")
     else:
         ext = "sh"
-
-    # with open(f"./build.{ext}", 'w') as f:
-    #     f.writelines([
-    #         "@echo off\n",
-    #         f"{gradlew_path} assembleDebug -b {build_path}"
-    #     ])
-    
-    # with open(f"./install.{ext}", 'w') as f:
-    #     f.writelines([
-    #         "@echo off\n",
-    #         f"{gradlew_path} installDebug -b {build_path}"
-    #     ])    
 
     with open(f"./run.{ext}", 'w') as f:
         f.writelines([
